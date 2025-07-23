@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>部門績效上傳</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<h2>📊 部門績效上傳</h2>
+
+<form id="kpiForm">
+
+<!-- 第一列：縱向 -->
+<div class="form-row" style="max-width: 300px; margin: 0 auto 10px;">
+  <label class="required" style="display: block; margin-bottom: 4px;">縱向:</label>
+  <select name="vertical" required style="width: 100%;">
+    <option value="人">人</option>
+    <option value="機">機</option>
+    <option value="料">料</option>
+    <option value="法">法</option>
+    <option value="环">环</option>
+    <option value="暫無">暫無</option>
+  </select>
+</div>
+
+<!-- 第二列：橫向 -->
+<div class="form-row" style="max-width: 300px; margin: 0 auto 10px;">
+  <label class="required" style="display: block; margin-bottom: 4px;">橫向:</label>
+  <select name="horizontal" required style="width: 100%;">
+    <option value="人資">人資</option>
+    <option value="行銷">行銷</option>
+    <option value="財務">財務</option>
+    <option value="管理">管理</option>
+    <option value="研發">研發</option>
+    <option value="暫無">暫無</option>
+  </select>
+</div>
+
+<!-- 第三列：檢討部門 -->
+<div class="form-row" style="max-width: 300px; margin: 0 auto 10px;">
+  <label class="required" style="display: block; margin-bottom: 4px;">檢討部門:</label>
+  <select name="reviewDept" required style="width: 100%;">
+    <option value="人資中心">人資中心</option>
+    <option value="三位副總">三位副總</option>
+    <option value="生產製造團隊">生產製造團隊</option>
+    <option value="技術研發團隊">技術研發團隊</option>
+    <option value="財務中心">財務中心</option>
+    <option value="採購中心">採購中心</option>
+    <option value="營運管理團隊">營運管理團隊</option>
+    <option value="暫無">暫無</option>
+  </select>
+</div>
+
+<!-- 第四列：KPI 項 -->
+<div class="form-row" style="max-width: 600px; margin: 0 auto 10px;">
+  <label style="display: block; margin-bottom: 4px;">KPI 項:</label>
+  <input type="text" name="kpi" placeholder="請輸入 KPI 名稱" style="width: 100%;">
+</div>
+
+<!-- 第五列：統計公式 -->
+<div class="form-row" style="max-width: 600px; margin: 0 auto 10px;">
+  <label style="display: block; margin-bottom: 4px;">統計公式:</label>
+  <input type="text" name="formula" placeholder="例：A/B 或 (X-Y)/Z" style="width: 100%;">
+</div>
+
+<!-- 第六列：年份 -->
+<div class="form-row" style="max-width: 300px; margin: 0 auto 10px;">
+  <label class="required" style="display: block; margin-bottom: 4px;">年份:</label>
+  <input type="number" id="yearInput" name="year" value="2025" min="2000" max="2100" style="width: 100%;">
+</div>
+
+<!-- 第七列：月份 -->
+<div class="form-row" style="max-width: 300px; margin: 0 auto 10px;">
+  <label class="required" style="display: block; margin-bottom: 4px;">月份:</label>
+  <select name="month" required style="width: 100%;">
+    <option value="0" selected>0</option>
+    <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+    <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+    <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+    <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+  </select>
+</div>
+
+<!-- 第八列：季 -->
+<div class="form-row" style="max-width: 300px; margin: 0 auto 10px;">
+  <label class="required" style="display: block; margin-bottom: 4px;">季:</label>
+  <select name="quarter" required style="width: 100%;">
+    <option value="0" selected>0</option>
+    <option value="3">3</option>
+    <option value="6">6</option>
+    <option value="9">9</option>
+    <option value="12">12</option>
+  </select>
+</div>
+
+<!-- 第九列：數值 -->
+<div class="form-row" style="max-width: 300px; margin: 0 auto 10px;">
+  <label style="display: block; margin-bottom: 4px;">數值:</label>
+  <input type="number" name="value" step="any" style="width: 100%;">
+</div>
+
+<!-- 第十列：單位 -->
+<div class="form-row" style="max-width: 300px; margin: 0 auto 10px;">
+  <label class="required" style="display: block; margin-bottom: 4px;">單位:</label>
+  <select name="unit" required style="width: 100%;">
+    <option value="%">%</option>
+    <option value="$">$</option>
+    <option value=":1">:1</option>
+    <option value="無">無</option>
+  </select>
+</div>
+
+<!-- 第十一列：送出按鈕 -->
+<div class="form-row" style="max-width: 150px; margin: 0 auto;">
+  <button type="submit" style="padding: 6px 16px; width: 100%;">✅ 送出</button>
+</div>
+
+
+</form>
+
+
+  <h3>📌 已記錄欄位（只讀） 
+  <button id="exportBtn" style="padding: 4px 8px; font-size: 14px; margin-left: 10px;">匯出 Excel</button>
+</h3>
+<table>
+  <thead>
+    <tr>
+      <th>序號</th><th>縱向</th><th>橫向</th><th>KPI</th><th>統計公式</th><th>年份</th><th>月份</th>
+      <th>季</th><th>檢討部門</th><th>數值</th><th>單位</th>
+    </tr>
+  </thead>
+  <tbody id="recordTable"></tbody>
+</table>
+
+  <h3>🔍 欲查詢欄位（可修改）</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>序號</th><th>縱向</th><th>橫向</th><th>KPI</th><th>統計公式</th><th>年份</th><th>月份</th>
+        <th>季</th><th>檢討部門</th><th>數值</th><th>單位</th><th>操作</th>
+      </tr>
+    </thead>
+    <tbody id="queryTable"></tbody>
+  </table>
+
+  <script src="script.js"></script>
+</body>
+</html>
